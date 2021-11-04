@@ -27,7 +27,7 @@ export class AccountService {
   }
 
   login(username, password) {
-    return this.http.post<User>(`${this.baseUrl}/users/authenticate`, { username, password })
+    return this.http.post<User>(`${this.baseUrl}/Person/authenticate`, { username, password })
       .pipe(map(user => {
         console.log(user);
         localStorage.setItem('user', JSON.stringify(user));
@@ -43,29 +43,29 @@ export class AccountService {
   }
 
   register(user: User) {
-    return this.http.post(`${this.baseUrl}/users`, user);
+    return this.http.post(`${this.baseUrl}/Person`, user);
   }
 
   getPagedUsers(pageNo, usersPerPaage) {
-    return this.http.get<User[]>(`${this.baseUrl}/Users/${pageNo}/${usersPerPaage}`);
+    return this.http.get<User[]>(`${this.baseUrl}/Person/${pageNo}/${usersPerPaage}`);
   }
 
   getAllUsersCount() {
-    return this.http.get(`${this.baseUrl}/Users/UserCount`);
+    return this.http.get(`${this.baseUrl}/Person/PersonsCount`);
   }
   getAll() {
-    return this.http.get<User[]>(`${this.baseUrl}/users`);
+    return this.http.get<User[]>(`${this.baseUrl}/Person`);
   }
 
   getById(id: string) {
-    return this.http.get<User>(`${this.baseUrl}/users/${id}`);
+    return this.http.get<User>(`${this.baseUrl}/Person/${id}`);
   }
 
   update(id, params) {
-    return this.http.put(`${this.baseUrl}/users/${id}`, params)
+    return this.http.put(`${this.baseUrl}/Person/${id}`, params)
       .pipe(map(x => {
         // update stored user if the logged in user updated their own record
-        if (id == this.userValue.id) {
+        if (id == this.userValue.code) {
           // update local storage
           const user = { ...this.userValue, ...params };
           localStorage.setItem('user', JSON.stringify(user));
@@ -78,10 +78,10 @@ export class AccountService {
   }
 
   delete(id: number) {
-    return this.http.delete(`${this.baseUrl}/users/${id}`)
+    return this.http.delete(`${this.baseUrl}/Person/${id}`)
       .pipe(map(x => {
         // auto logout if the logged in user deleted their own record
-        if (id == this.userValue.id) {
+        if (id == this.userValue.code) {
           this.logout();
         }
         return x;
