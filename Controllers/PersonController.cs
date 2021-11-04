@@ -77,7 +77,7 @@ namespace Project1.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPerson(int id, Person person)
         {
-            if (id != person.id)
+            if (id != person.Code)
             {
                 return BadRequest();
             }
@@ -98,7 +98,7 @@ namespace Project1.Controllers
         public async Task<ActionResult<Person>> register(Person person)
         {
             _personService.Add(person);
-            return CreatedAtAction("GetPerson", new { id = person.id }, person);
+            return CreatedAtAction("GetPerson", new { id = person.Code }, person);
         }
 
         [AllowAnonymous]
@@ -117,7 +117,7 @@ namespace Project1.Controllers
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, person.id.ToString())
+                    new Claim(ClaimTypes.Name, person.Code.ToString())
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
@@ -128,7 +128,7 @@ namespace Project1.Controllers
             // return basic person info and authentication token
             return Ok(new
             {
-                Id = person.id,
+                Id = person.Code,
                 Personname = person.username,
                 FirstName = person.Name,
                 LastName = person.Surname,
