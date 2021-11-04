@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { User } from 'src/app/models';
+import { TransactionAccount, User } from 'src/app/models';
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
@@ -60,6 +60,11 @@ export class AccountService {
   getById(id: string) {
     return this.http.get<User>(`${this.baseUrl}/Person/${id}`);
   }
+
+  addAccount(acc: TransactionAccount) {
+    return this.http.post(`${this.baseUrl}/Person/account`, acc);
+  }
+
 
   update(id, params) {
     return this.http.put(`${this.baseUrl}/Person/${id}`, params)

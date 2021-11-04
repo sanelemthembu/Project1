@@ -15,6 +15,8 @@ import { JwtInterceptor, ErrorInterceptor } from './common';
 import { AlertComponent } from './components';
 import { AboutComponent } from './about/about.component';
 import { ContactUsComponent } from './contactus/contactus.component';
+import { DatePipe } from '@angular/common';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 const accountModule = () => import('./account/account.module').then(x => x.AccountModule);
 const usersModule = () => import('./user/users.module').then(x => x.UsersModule);
@@ -29,9 +31,10 @@ const usersModule = () => import('./user/users.module').then(x => x.UsersModule)
     ContactUsComponent,
     CounterComponent,
     AlertComponent,
-    FetchDataComponent,
+    FetchDataComponent
   ],
   imports: [
+    NgbModule,
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
@@ -48,6 +51,7 @@ const usersModule = () => import('./user/users.module').then(x => x.UsersModule)
     ])
   ],
   providers: [
+    DatePipe,
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
   ],

@@ -59,6 +59,17 @@ namespace Project1.Controllers
         {
             return _personService.PersonsCount();
         }
+ 
+        [HttpPost("account")]
+        public async Task<ActionResult<Person>> PostWaybill(Account account)
+        {
+            var result = await _personService.AddAccount(account);
+            if (result)
+            {
+                return CreatedAtAction("GetAccount", account);
+            }
+            return BadRequest();
+        }
 
         // GET: api/Persons/5
         [HttpGet("{id}")]
