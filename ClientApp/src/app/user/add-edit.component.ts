@@ -22,7 +22,7 @@ export class AddEditComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.id = this.route.snapshot.params['code'];
+    this.id = this.route.snapshot.params['id'];
     this.isAddMode = !this.id;
 
     // password not required in edit mode
@@ -41,10 +41,12 @@ export class AddEditComponent implements OnInit {
     });
 
     if (!this.isAddMode) {
+
       this.accountService.getById(this.id)
         .pipe(first())
         .subscribe(x => {
-          this.f.id.setValue(x.code);
+
+          this.f.code.setValue(x.code);
           this.f.name.setValue(x.name);
           this.f.surname.setValue(x.surname);
           this.f.idnumber.setValue(x.idNumber);

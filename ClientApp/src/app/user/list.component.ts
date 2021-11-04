@@ -39,12 +39,13 @@ export class ListComponent implements OnInit {
   }
 
   deleteUser(id: number) {
-    const user = this.users.find(x => x.id === id);
+    const user = this.users.find(x => x.code === id);
+    console.log(user)
     user.isDeleting = true;
     this.accountService.delete(id)
       .pipe(first())
       .subscribe(() => {
-        this.users = this.users.filter(x => x.id !== id)
+        this.users = this.users.filter(x => x.code !== id)
       });
   }
 }
