@@ -3,8 +3,8 @@ export class User {
   username: string;
   password: string;
   idNumber: string;
-  firstName: string;
-  lastName: string;
+  name: string;
+  surname: string;
   token: string;
   accounts: any[];
 }

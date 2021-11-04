@@ -10,7 +10,7 @@ export class ListComponent implements OnInit {
   users = null;
   public mainUsersSource: User[];
   page = 1;
-  pageSize = 3;
+  pageSize = 10;
   collectionSize: number;
 
   constructor(private accountService: AccountService) { }

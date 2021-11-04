@@ -51,7 +51,7 @@ export class AccountService {
   }
 
   getAllUsersCount() {
-    return this.http.get(`${this.baseUrl}/Person/PersonsCount`);
+    return this.http.get(`${this.baseUrl}/Person/PersonCount`);
   }
   getAll() {
     return this.http.get<User[]>(`${this.baseUrl}/Person`);

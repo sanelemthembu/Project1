@@ -22,7 +22,7 @@ export class AddEditComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.id = this.route.snapshot.params['id'];
+    this.id = this.route.snapshot.params['code'];
     this.isAddMode = !this.id;
 
     // password not required in edit mode
@@ -32,11 +32,12 @@ export class AddEditComponent implements OnInit {
     }
 
     this.form = this.formBuilder.group({
-      id: [''],
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
+      code: [''],
+      name: ['', Validators.required],
+      surname: ['', Validators.required],
       username: ['', Validators.required],
-      password: ['', passwordValidators]
+      password: ['', passwordValidators],
+      idnumber: ['']
     });
 
     if (!this.isAddMode) {
@@ -44,8 +45,9 @@ export class AddEditComponent implements OnInit {
         .pipe(first())
         .subscribe(x => {
           this.f.id.setValue(x.code);
-          this.f.firstName.setValue(x.firstName);
-          this.f.lastName.setValue(x.lastName);
+          this.f.name.setValue(x.name);
+          this.f.surname.setValue(x.surname);
+          this.f.idnumber.setValue(x.idNumber);
           this.f.username.setValue(x.username);
         });
     }
