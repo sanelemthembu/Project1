@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { User } from '../models';
+import { AccountService } from '../services';
 
 @Component({
   selector: 'app-nav-menu',
@@ -7,6 +9,15 @@ import { Component } from '@angular/core';
 })
 export class NavMenuComponent {
   isExpanded = false;
+  user: User;
+
+  constructor(private accountService: AccountService) {
+    this.accountService.user.subscribe(x => this.user = x);
+  }
+
+  logout() {
+    this.accountService.logout();
+  }
 
   collapse() {
     this.isExpanded = false;
