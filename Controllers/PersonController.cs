@@ -18,73 +18,73 @@ namespace Project1.Controllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class PersonController : ControllerBase
     {
 
-        private IUserService _userService;
+        private IPersonservice _personService;
         private readonly AppSettings _appSettings;
 
-        public UsersController(
-            IUserService userService,
+        public PersonController(
+            IPersonservice personService,
             IOptions<AppSettings> appSettings
             )
         {
             _appSettings = appSettings.Value;
-            _userService = userService;
+            _personService = personService;
         }
 
-        // GET: api/Users
+        // GET: api/Persons
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<Person>>> GetPersons()
         {
-            var users = _userService.GetAll().ToList();
-            return users;
+            var persons = _personService.GetAll().ToList();
+            return persons;
         }
 
         [AllowAnonymous]
-        // GET: api/Users
+        // GET: api/Persons
         [HttpGet("{pageNo}/{pageSize}")]
-        public async Task<ActionResult<IEnumerable<User>>> GetPagedUsers(int pageNo, int pageSize)
+        public async Task<ActionResult<IEnumerable<Person>>> GetPagedPersons(int pageNo, int pageSize)
         {
             var x = pageNo - 1;
-            var users = _userService.GetAll()
+            var persons = _personService.GetAll()
                 .Skip(x * pageSize)
                 .Take(pageSize)
                 .ToList();
-            return users;
+            return persons;
         }
 
-        [HttpGet("UserCount")]
-        public int UsersCount()
+        [HttpGet("PersonCount")]
+        public int PersonsCount()
         {
-            return _userService.UsersCount();
+            return _personService.PersonsCount();
         }
 
-        // GET: api/Users/5
+        // GET: api/Persons/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(int id)
+        public async Task<ActionResult<Person>> GetPerson(int id)
         {
-            var user = _userService.GetById(id);
-            if (user == null)
+            var person = _personService.GetById(id);
+            if (person == null)
             {
                 return NotFound();
             }
 
-            return user;
+            return person;
         }
 
-        // PUT: api/Users/5
+        // PUT: api/Persons/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int id, User user)
+        public async Task<IActionResult> PutPerson(int id, Person person)
         {
-            if (id != user.id)
+            if (id != person.id)
             {
                 return BadRequest();
             }
 
             try
             {
-                _userService.Update(user);
+                _personService.Update(person);
                 return Ok();
             }
             catch (AppException ex)
@@ -95,21 +95,21 @@ namespace Project1.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<ActionResult<User>> register(User user)
+        public async Task<ActionResult<Person>> register(Person person)
         {
-            _userService.Add(user);
-            return CreatedAtAction("GetUser", new { id = user.id }, user);
+            _personService.Add(person);
+            return CreatedAtAction("GetPerson", new { id = person.id }, person);
         }
 
         [AllowAnonymous]
         [HttpPost("authenticate")]
 
-        public async Task<ActionResult<User>> authenticate(User u)
+        public async Task<ActionResult<Person>> authenticate(Person u)
         {
-            var user = _userService.Authenticate(u.username, u.password);
+            var person = _personService.Authenticate(u.username, u.password);
 
-            if (user == null)
-                return BadRequest(new { message = "Username or password is incorrect" });
+            if (person == null)
+                return BadRequest(new { message = "Personname or password is incorrect" });
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
@@ -117,7 +117,7 @@ namespace Project1.Controllers
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, user.id.ToString())
+                    new Claim(ClaimTypes.Name, person.id.ToString())
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
@@ -125,21 +125,21 @@ namespace Project1.Controllers
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var tokenString = tokenHandler.WriteToken(token);
 
-            // return basic user info and authentication token
+            // return basic person info and authentication token
             return Ok(new
             {
-                Id = user.id,
-                Username = user.username,
-                FirstName = user.firstName,
-                LastName = user.lastName,
+                Id = person.id,
+                Personname = person.username,
+                FirstName = person.Name,
+                LastName = person.Surname,
                 Token = tokenString
             });
         }
-        // DELETE: api/Users/5
+        // DELETE: api/Persons/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(int id)
+        public async Task<IActionResult> DeletePerson(int id)
         {
-            _userService.Delete(id);
+            _personService.Delete(id);
             return Accepted();
         }
     }

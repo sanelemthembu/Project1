@@ -28,7 +28,7 @@ namespace Project1
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<AppDbContext>(o =>
+            services.AddDbContext<masterContext>(o =>
             {
                 o.UseSqlServer(Configuration.GetConnectionString("Default"));
             });
@@ -43,7 +43,7 @@ namespace Project1
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
 
-            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IPersonservice, Personservice>();
             services.AddControllersWithViews();
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -64,7 +64,7 @@ namespace Project1
                 {
                     OnTokenValidated = context =>
                     {
-                        var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
+                        var userService = context.HttpContext.RequestServices.GetRequiredService<IPersonservice>();
                         var userId = int.Parse(context.Principal.Identity.Name);
                         var user = userService.GetById(userId);
                         if (user == null)
