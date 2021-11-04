@@ -1,3 +1,5 @@
+import { TransactionAccount } from ".";
+
 export class User {
   code: number;
   username: string;
@@ -6,5 +8,5 @@ export class User {
   name: string;
   surname: string;
   token: string;
-  accounts: any[];
+  accounts: TransactionAccount[];
 }

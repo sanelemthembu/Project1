@@ -3,6 +3,7 @@ import { User } from '../models';
 import { first } from 'rxjs/operators';
 
 import { AccountService } from 'src/app/services';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({ templateUrl: 'list.component.html' })
 export class ListComponent implements OnInit {
@@ -12,8 +13,15 @@ export class ListComponent implements OnInit {
   page = 1;
   pageSize = 10;
   collectionSize: number;
+  form: FormGroup;
 
-  constructor(private accountService: AccountService) { }
+
+
+  constructor(private accountService: AccountService, private formBuilder: FormBuilder) {
+    this.accountService.getAll().subscribe(all => {
+      this.mainUsersSource = all
+    })
+  }
 
   refresh() {
 
@@ -27,6 +35,15 @@ export class ListComponent implements OnInit {
 
   ngOnInit() {
 
+    this.form = this.formBuilder.group({
+      filter: ['']
+    });
+    this.form.get("filter").valueChanges.subscribe(x => {
+      console.log(this.mainUsersSource)
+      this.users = this.mainUsersSource.filter(f => f.surname.includes(x)
+        //|| f.accounts.filter(a => a.accountNumber.includes(x))
+        || f.idNumber.includes(x));
+    });
     this.accountService.getPagedUsers(this.page, this.pageSize)
       .pipe(first())
       .subscribe(u => {
