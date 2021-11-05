@@ -1,0 +1,82 @@
+<h1>Account Details</h1>
+<form [formGroup]="form">
+  <div class="form-row">
+    <div class="form-group col">
+      <label for="accountNumber">Account Number</label>
+      <input type="text" disabled="disabled" formControlName="accountNumber" class="form-control" />
+    </div>
+    <div class="form-group col">
+      <label for="outstandingBalance">Outstanding Balance</label>
+      <input type="text" disabled="disabled" formControlName="outstandingBalance" class="form-control" />
+    </div>
+  </div>  
+</form>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Account Number</th>
+      <th>Transaction Date</th>
+      <th>Capture Date</th>
+      <th>Amount</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let transaction of transactions">
+      <td>{{transaction.code}}</td>
+      <td>{{transaction.accountCode}}</td>
+      <td>{{transaction.transactionDate}}</td>
+      <td>{{transaction.captureDate}}</td>
+      <td>{{transaction.amount}}</td>
+      <td>{{transaction.description}}</td>
+      <td style="white-space: nowrap">
+        <a routerLink="edit/{{transaction.code}}" class="btn btn-sm btn-primary mr-1">Edit</a>
+        <button (click)="deleteTransaction(account.code)" class="btn btn-sm btn-danger btn-delete-user" [disabled]="transaction.isDeleting">
+          <span *ngIf="transaction.isDeleting" class="spinner-border spinner-border-sm"></span>
+          <span *ngIf="!transaction.isDeleting">Delete</span>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<button [disabled]="loading" class="btn btn-success" (click)="open(content)">
+  <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+  Add Transaction
+</button>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Account Details</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="formAccount" (ngSubmit)="onSubmitAccount()">
+      <div class="form-row">
+        <!--<div class="form-group col">
+          <label for="code">ID</label>
+          <input type="text" formControlName="code" disabled="disabled" class="form-control" />
+        </div>-->
+        <div class="form-group col">
+          <label for="accountNumber">Account Number</label>
+          <input type="text" disabled="disabled" formControlName="accountNumber" class="form-control" />
+        </div>
+        <div class="form-group col">
+          <label for="outstandingBalance">Outstanding Balance</label>
+          <input type="text" disabled="disabled" formControlName="outstandingBalance" class="form-control" />
+
+        </div>
+      </div>
+      <div class="form-group">
+        <button [disabled]="loading" class="btn btn-primary">
+          <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+          Save
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-template>
+

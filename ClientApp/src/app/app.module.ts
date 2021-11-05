@@ -20,6 +20,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 const accountModule = () => import('./account/account.module').then(x => x.AccountModule);
 const usersModule = () => import('./user/users.module').then(x => x.UsersModule);
+const transactionAccountModule = () => import('./transactionAccount/transactionAccount.module').then(x => x.TransactionAccountModule);
 
 
 @NgModule({
@@ -42,6 +43,7 @@ const usersModule = () => import('./user/users.module').then(x => x.UsersModule)
       { path: '', component: HomeComponent, pathMatch: 'full', canActivate: [AuthGuard] },
       { path: 'users', loadChildren: usersModule, canActivate: [AuthGuard] },
       { path: 'account', loadChildren: accountModule },
+      { path: 'transactionAccount', loadChildren: transactionAccountModule, canActivate: [AuthGuard] },
       { path: '', component: HomeComponent, pathMatch: 'full', canActivate: [AuthGuard] },
       { path: 'counter', component: CounterComponent, canActivate: [AuthGuard] },
       { path: 'about', component: AboutComponent },

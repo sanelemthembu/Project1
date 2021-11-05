@@ -52,7 +52,6 @@
     <Folder Include="ClientApp\src\app\account\" />
     <Folder Include="ClientApp\src\app\components\" />
     <Folder Include="ClientApp\src\app\common\" />
-    <Folder Include="ClientApp\src\app\services\" />
     <Folder Include="ClientApp\src\app\user\" />
   </ItemGroup>
 

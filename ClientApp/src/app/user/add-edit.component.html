@@ -1,5 +1,4 @@
-<h1 *ngIf="isAddMode">Add User</h1>
-<h1 *ngIf="!isAddMode">Edit User</h1>
+<h1>User Details</h1>
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
   <div class="form-row">
     <div class="form-group col">
@@ -66,6 +65,13 @@
       <td>{{account.code}}</td>
       <td>{{account.accountNumber}}</td>
       <td>{{account.outstandingBalance}}</td>
+      <td style="white-space: nowrap">
+        <a routerLink="/transactionAccount/edit/{{account.code}}" class="btn btn-sm btn-primary mr-1">Edit</a>
+        <button (click)="deleteAccount(account.code)" class="btn btn-sm btn-danger btn-delete-user" [disabled]="account.isDeleting">
+          <span *ngIf="account.isDeleting" class="spinner-border spinner-border-sm"></span>
+          <span *ngIf="!account.isDeleting">Delete</span>
+        </button>
+      </td>
     </tr>
   </tbody>
 </table>

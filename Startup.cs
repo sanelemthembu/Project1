@@ -44,6 +44,7 @@ namespace Project1
             services.Configure<AppSettings>(appSettingsSection);
 
             services.AddScoped<IPersonservice, Personservice>();
+            services.AddScoped<IAccountservice, Accountservice>();
             services.AddControllersWithViews()
                 .AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
