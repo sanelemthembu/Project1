@@ -9,7 +9,7 @@
       <label for="outstandingBalance">Outstanding Balance</label>
       <input type="text" disabled="disabled" formControlName="outstandingBalance" class="form-control" />
     </div>
-  </div>  
+  </div>
 </form>
 
 <table class="table table-striped">
@@ -54,20 +54,23 @@
     </button>
   </div>
   <div class="modal-body">
-    <form [formGroup]="formAccount" (ngSubmit)="onSubmitAccount()">
+    <form [formGroup]="formTransaction" (ngSubmit)="onSubmitTransaction()">
       <div class="form-row">
-        <!--<div class="form-group col">
-          <label for="code">ID</label>
-          <input type="text" formControlName="code" disabled="disabled" class="form-control" />
-        </div>-->
         <div class="form-group col">
-          <label for="accountNumber">Account Number</label>
-          <input type="text" disabled="disabled" formControlName="accountNumber" class="form-control" />
+          <label for="transactionDate">Transaction Date</label>
+          <input type="text" disabled="disabled" formControlName="transactionDate" class="form-control" />
         </div>
         <div class="form-group col">
-          <label for="outstandingBalance">Outstanding Balance</label>
-          <input type="text" disabled="disabled" formControlName="outstandingBalance" class="form-control" />
-
+          <label for="captureDate">Capture Date</label>
+          <input type="text" disabled="disabled" formControlName="captureDate" class="form-control" />
+        </div>
+        <div class="form-group col">
+          <label for="amount">Amount</label>
+          <input type="text" disabled="disabled" formControlName="amount" class="form-control" />
+        </div>
+        <div class="form-group col">
+          <label for="description">Description</label>
+          <input type="text" disabled="disabled" formControlName="description" class="form-control" />
         </div>
       </div>
       <div class="form-group">
