@@ -59,11 +59,11 @@ export class AddEditComponent implements OnInit {
 
     this.formAccount = this.formBuilder.group({
       code: 0,
-      personCode: 0,
+      personCode: this.id,
       accountNumber: [''],
       outstandingBalance: 0,
       transactions: []
-      
+
     });
 
     this.form = this.formBuilder.group({
@@ -129,7 +129,6 @@ export class AddEditComponent implements OnInit {
 
   private addAccount() {
 
-    this.formAccount.get('code').setValue(this.form.value.id)
     this.accountService.addAccount(this.formAccount.value)
       .pipe(first())
       .subscribe(
