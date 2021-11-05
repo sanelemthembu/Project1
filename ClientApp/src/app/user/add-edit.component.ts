@@ -16,6 +16,7 @@ export class AddEditComponent implements OnInit {
   formAccount: FormGroup;
   accounts: any[];
   closeResult = '';
+  nxtAccountNumber: number;
 
   constructor(
     private modalService: NgbModal,
@@ -28,6 +29,17 @@ export class AddEditComponent implements OnInit {
 
 
   open(content) {
+        
+    console.log(this.nxtAccountNumber)
+    this.formAccount = this.formBuilder.group({
+      code: 0,
+      personCode: this.id,
+      accountNumber: this.nxtAccountNumber,
+      outstandingBalance: 0,
+      transactions: []
+
+    });
+
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
@@ -47,6 +59,9 @@ export class AddEditComponent implements OnInit {
 
 
   ngOnInit() {
+
+    this.GetNextAccountNumber()
+
     this.id = this.route.snapshot.params['id'];
     this.isAddMode = !this.id;
 
@@ -55,17 +70,7 @@ export class AddEditComponent implements OnInit {
     if (this.isAddMode) {
       passwordValidators.push(Validators.required);
     }
-
-
-    this.formAccount = this.formBuilder.group({
-      code: 0,
-      personCode: this.id,
-      accountNumber: [''],
-      outstandingBalance: 0,
-      transactions: []
-
-    });
-
+   
     this.form = this.formBuilder.group({
       code: [''],
       name: ['', Validators.required],
@@ -89,6 +94,13 @@ export class AddEditComponent implements OnInit {
           this.accounts = x.accounts;
         });
     }
+  }
+
+  GetNextAccountNumber(): any {
+    this.accountService.GetAccountNumber()      
+      .subscribe(x => {
+        this.nxtAccountNumber = x
+      });
   }
 
   // convenience getter for easy access to form fields

@@ -60,8 +60,14 @@ namespace Project1.Controllers
             return _personService.PersonsCount();
         }
  
+        [HttpGet("accountnumber")]
+        public int NextAccountNumber()
+        {
+            return _personService.getnextAccountNumber();
+        }
+ 
         [HttpPost("account")]
-        public async Task<ActionResult<Person>> PostWaybill(Account account)
+        public async Task<ActionResult<Person>> PostAccount(Account account)
         {
             var result = await _personService.AddAccount(account);
             if (result)

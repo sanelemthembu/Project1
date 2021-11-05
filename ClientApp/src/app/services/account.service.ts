@@ -8,6 +8,9 @@ import { TransactionAccount, User } from 'src/app/models';
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
+  GetAccountNumber() {
+    return this.http.get<number>(`${this.baseUrl}/Person/accountnumber`);
+  }
   private userSubject: BehaviorSubject<User>;
   public user: Observable<User>;
   baseUrl: string;
