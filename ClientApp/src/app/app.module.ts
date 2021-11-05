@@ -17,7 +17,6 @@ import { AboutComponent } from './about/about.component';
 import { ContactUsComponent } from './contactus/contactus.component';
 import { DatePipe } from '@angular/common';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { MatDatepickerModule } from '@angular/material/datepicker';
 
 
 const accountModule = () => import('./account/account.module').then(x => x.AccountModule);
@@ -37,7 +36,6 @@ const transactionAccountModule = () => import('./transactionAccount/transactionA
     FetchDataComponent
   ],
   imports: [
-    MatDatepickerModule,
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
