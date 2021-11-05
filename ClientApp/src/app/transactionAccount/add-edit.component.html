@@ -58,25 +58,28 @@
       <div class="form-row">
         <div class="form-group col">
           <label for="transactionDate">Transaction Date</label>
-          <mat-form-field appearance="fill">
-            <mat-label>Choose a date</mat-label>
-            <input matInput [matDatepicker]="picker">
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-          </mat-form-field>
-          <!--<ngb-datepicker #dp [(ngModel)]="model" class="form-control" formControlName="transactionDate" (navigate)="date = $event.next"></ngb-datepicker>-->
-          <!--<input type="text"   />-->
+          <div class="input-group">
+            <input class="form-control" placeholder="yyyy-mm-dd" formControlName="transactionDate"
+                   name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker">
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"></button>
+            </div>
+          </div>
         </div>
         <div class="form-group col">
           <label for="captureDate">Capture Date</label>
-          <input type="text" formControlName="captureDate" class="form-control" />
+          <div class="input-group">
+            <input class="form-control" placeholder="yyyy-mm-dd" formControlName="captureDate"
+                   name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker">
+            <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"></button>
+          </div>
         </div>
-      </div>
-      <div class="form-row">
         <div class="form-group col">
           <label for="amount">Amount</label>
           <input type="text" formControlName="amount" class="form-control" />
         </div>
+      </div>
+      <div class="form-row">
         <div class="form-group col">
           <label for="description">Description</label>
           <input type="text" formControlName="description" class="form-control" />

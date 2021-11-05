@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
 import { TransactionAccountService, TransactionService, AlertService } from 'src/app/services';
-import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalDismissReasons, NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Transaction } from '../models';
 import { DatePipe } from '@angular/common';
 
@@ -20,6 +20,7 @@ export class AddEditComponent implements OnInit {
   formAccount: FormGroup;
   formTransaction: FormGroup;
   transactions: Transaction[];
+  model: NgbDateStruct;
 
   constructor(
     private modalService: NgbModal,
