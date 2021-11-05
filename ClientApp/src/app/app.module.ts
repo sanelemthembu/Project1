@@ -18,6 +18,7 @@ import { ContactUsComponent } from './contactus/contactus.component';
 import { DatePipe } from '@angular/common';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
+
 const accountModule = () => import('./account/account.module').then(x => x.AccountModule);
 const usersModule = () => import('./user/users.module').then(x => x.UsersModule);
 const transactionAccountModule = () => import('./transactionAccount/transactionAccount.module').then(x => x.TransactionAccountModule);
@@ -35,10 +36,10 @@ const transactionAccountModule = () => import('./transactionAccount/transactionA
     FetchDataComponent
   ],
   imports: [
-    NgbModule,
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
+    NgbModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full', canActivate: [AuthGuard] },
       { path: 'users', loadChildren: usersModule, canActivate: [AuthGuard] },

@@ -58,19 +58,23 @@
       <div class="form-row">
         <div class="form-group col">
           <label for="transactionDate">Transaction Date</label>
-          <input type="text" disabled="disabled" formControlName="transactionDate" class="form-control" />
+          <input type="text" ngbDatepicker #d="ngbDatepicker" />
+          <!--<ngb-datepicker #dp [(ngModel)]="model" class="form-control" formControlName="transactionDate" (navigate)="date = $event.next"></ngb-datepicker>-->
+          <!--<input type="text"   />-->
         </div>
         <div class="form-group col">
           <label for="captureDate">Capture Date</label>
-          <input type="text" disabled="disabled" formControlName="captureDate" class="form-control" />
+          <input type="text" formControlName="captureDate" class="form-control" />
         </div>
+      </div>
+      <div class="form-row">
         <div class="form-group col">
           <label for="amount">Amount</label>
-          <input type="text" disabled="disabled" formControlName="amount" class="form-control" />
+          <input type="text" formControlName="amount" class="form-control" />
         </div>
         <div class="form-group col">
           <label for="description">Description</label>
-          <input type="text" disabled="disabled" formControlName="description" class="form-control" />
+          <input type="text" formControlName="description" class="form-control" />
         </div>
       </div>
       <div class="form-group">
