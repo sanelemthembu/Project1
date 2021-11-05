@@ -39,9 +39,8 @@ export class ListComponent implements OnInit {
       filter: ['']
     });
     this.form.get("filter").valueChanges.subscribe(x => {
-      console.log(this.mainUsersSource)
       this.users = this.mainUsersSource.filter(f => f.surname.includes(x)
-        || (f.accounts.filter(a => a.accountNumber  === x).length > 0)
+        || (f.accounts.filter(a => a.accountNumber.includes(x)).length > 0)
         || f.idNumber.includes(x));
     });
     this.accountService.getPagedUsers(this.page, this.pageSize)
