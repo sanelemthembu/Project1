@@ -6,5 +6,5 @@ export class TransactionAccount {
   accountNumber: string;
   outstandingBalance: number;
   transactions: Transaction[];
-  isActive: string;
+  isActive: boolean;
 }

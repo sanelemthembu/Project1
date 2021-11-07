@@ -3,11 +3,15 @@
   <div class="form-row">
     <div class="form-group col">
       <label for="accountNumber">Account Number</label>
-      <input type="text" disabled="disabled" formControlName="accountNumber" class="form-control" />
+      <input type="text" formControlName="accountNumber" class="form-control" />
     </div>
     <div class="form-group col">
       <label for="outstandingBalance">Outstanding Balance</label>
-      <input type="text" disabled="disabled" formControlName="outstandingBalance" class="form-control" />
+      <input type="text" formControlName="outstandingBalance" class="form-control" />
+    </div>
+    <div class="form-group col">
+      <label for="state">Account Closed/Active</label>
+      <input type="text" formControlName="state" class="form-control" />
     </div>
   </div>
 </form>
@@ -31,15 +35,11 @@
       <td>{{transaction.description}}</td>
       <td style="white-space: nowrap">
         <a routerLink="edit/{{transaction.code}}" class="btn btn-sm btn-primary mr-1">Edit</a>
-        <button (click)="deleteTransaction(transaction.code)" class="btn btn-sm btn-danger btn-delete-user" [disabled]="transaction.isDeleting">
-          <span *ngIf="transaction.isDeleting" class="spinner-border spinner-border-sm"></span>
-          <span *ngIf="!transaction.isDeleting">Delete</span>
-        </button>
       </td>
     </tr>
   </tbody>
 </table>
-<button [disabled]="loading" class="btn btn-success" (click)="open(content)">
+<button [disabled]="loading || !accountClosed" class="btn btn-success" (click)="open(content)">
   <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
   Add Transaction
 </button>
@@ -56,25 +56,34 @@
       <div class="form-row">
         <div class="form-group col">
           <label for="transactionDate">Transaction Date</label>
-          <!--<div class="input-group">
+          <div class="input-group">
             <input class="form-control" placeholder="yyyy-mm-dd" formControlName="transactionDate"
-                   name="dp" [(ngModel)]="transactionDate" ngbDatepicker #d="ngbDatepicker">
+                   name="dp" [(ngModel)]="transactionDate" ngbDatepicker #d="ngbDatepicker" [maxDate]="today">
             <div class="input-group-append">
               <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"></button>
             </div>
-          </div>-->
+          </div>
         </div>
         <div class="form-group col">
           <label for="captureDate">Capture Date</label>
-          <!--<div class="input-group">
-            <input class="form-control" placeholder="yyyy-mm-dd" formControlName="captureDate"
-                   name="dp" [(ngModel)]="captureDate" ngbDatepicker #d="ngbDatepicker">
-            <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"></button>
-          </div>-->
+          <div class="input-group">
+            <input type="text" placeholder="yyyy-mm-dd" formControlName="captureDate" class="form-control" />
+          </div>
         </div>
         <div class="form-group col">
           <label for="amount">Amount</label>
           <input type="text" formControlName="amount" class="form-control" />
+          <div *ngIf="submitted && t.amount.errors" class="invalid-feedback">
+            <div *ngIf="t.amount.errors.min">Amount must be at least R1.</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col">
+          <label for="type">Credit/Debit</label>
+          <select (change)="onTypeChanged($event)" class="browser-default custom-select" formControlName="type" id="type" [ngClass]="{ 'is-invalid': submitted && t.type.errors }">
+            <option *ngFor="let option of types" [value]="option">{{option}}</option>
+          </select>
         </div>
       </div>
       <div class="form-row">

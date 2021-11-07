@@ -7,5 +7,6 @@ export class Transaction {
   captureDate: DatePipe;
   amount: number;
   description: string;
+  TransactionType: string;
 
 }

@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
 import { TransactionAccountService, TransactionService, AlertService } from 'src/app/services';
-import { ModalDismissReasons, NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalDismissReasons, NgbCalendar, NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Transaction, TransactionAccount } from '../models';
 import { DatePipe } from '@angular/common';
 
@@ -12,9 +12,13 @@ import { DatePipe } from '@angular/common';
 export class AddEditComponent implements OnInit {
 
   form: FormGroup;
+  types: any[];
+  selectedType: string;
   id: string;
   isAddMode: boolean;
   loading: boolean;
+  accountClosed: boolean;
+  stateDescription: string;
   submitted: boolean;
   closeResult = '';
   formAccount: FormGroup;
@@ -22,13 +26,14 @@ export class AddEditComponent implements OnInit {
   transactions: Transaction[];
   account: TransactionAccount;
   transactionDate: NgbDateStruct;
-  //captureDate: NgbDateStruct;
+  today: any;
 
   page = 1;
   pageSize = 10;
   collectionSize: number;
 
   constructor(
+    private cal: NgbCalendar,
     private dateTimePipe: DatePipe,
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
@@ -38,10 +43,16 @@ export class AddEditComponent implements OnInit {
     private transactionService: TransactionService,
     private alertService: AlertService
   ) {
+
+    this.today = cal.getToday()
+
+    console.log(this.today)
   }
 
 
   ngOnInit() {
+
+    this.types = ['Credit', 'Debit']
 
     this.id = this.route.snapshot.params['id'];
     this.isAddMode = !this.id;
@@ -51,16 +62,13 @@ export class AddEditComponent implements OnInit {
         this.collectionSize = res
       })
 
-    this.transactionAccountService.getById(this.id)
-      .subscribe(a => {
-        this.account = a
-      })
     this.refresh()
 
-
     this.form = this.formBuilder.group({
-      accountNumber: [''],
-      outstandingBalance: ['']
+      code: 0,
+      accountNumber: [{ value: '', disabled: true }],
+      outstandingBalance: [{ value: '', disabled: true }],
+      state: [{ value: this.stateDescription, disabled: true }],
     });
 
     if (!this.isAddMode) {
@@ -73,8 +81,22 @@ export class AddEditComponent implements OnInit {
         });
     }
   }
+  onTypeChanged(event: any) {
+    this.selectedType = this.types.find(n => n == event.target.value);
+  }
+
 
   refresh() {
+    this.transactionAccountService.getById(this.id)
+      .subscribe(a => {
+        this.account = a
+        this.accountClosed = a.isActive
+
+        this.stateDescription = this.accountClosed ? 'Active' : 'Closed';
+
+        this.form.get('state').setValue(this.stateDescription);
+      })
+
 
     this.transactionService.getPagedTransactions(this.page, this.pageSize)
       .pipe(first())
@@ -88,11 +110,11 @@ export class AddEditComponent implements OnInit {
     this.formTransaction = this.formBuilder.group({
       code: 0,
       accountCode: this.id,
-      transactionDate: new Date(),
-      captureDate: new Date(),
-      amount: 0,
-      description: ['']
-
+      transactionDate: [''],
+      captureDate: [{ value: new Date().toISOString(), disabled: true }],
+      amount: [0, Validators.min(1)],
+      description: [''],
+      type: ['']
     });
 
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
@@ -115,7 +137,7 @@ export class AddEditComponent implements OnInit {
   onSubmitTransaction() {
     this.submitted = true;
 
-    if (this.form.invalid) {
+    if (this.formTransaction.invalid) {
       return;
     }
 
@@ -138,16 +160,6 @@ export class AddEditComponent implements OnInit {
           this.alertService.error(error);
         });
   }
-
-  private deleteTransaction(id: number) {
-    const t = this.transactions.find(x => x.code === id);
-    this.transactionService.delete(id)
-      .pipe(first())
-      .subscribe(() => {
-        this.transactions = this.transactions.filter(x => x.code !== id)
-      });
-  }
-
 
   get f() { return this.form.controls; }
   get t() { return this.formTransaction.controls; }

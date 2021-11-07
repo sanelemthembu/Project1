@@ -59,7 +59,7 @@
         <th style="width: 5%">ID</th>
         <th style="width: 15%">Account Number</th>
         <th style="width: 25%">Outstanding Balance</th>
-        <th style="width: 5%">Account Open/Active</th>
+        <th style="width: 5%">Account Active</th>
         <th style="width: 50%"></th>
       </tr>
     </thead>
@@ -70,7 +70,7 @@
         <td>{{account.outstandingBalance}}</td>
         <td>{{account.isActive}}</td>
         <td style="white-space: nowrap">
-          <a routerLink="/transactionAccount/edit/{{account.code}}" class="btn btn-sm btn-primary mr-1">Edit</a>
+          <a routerLink="/transactionAccount/edit/{{account.code}}" class="btn btn-sm btn-primary mr-1">Transact</a>
           <button (click)="deleteAccount(account.code)" class="btn btn-sm btn-danger btn-delete-user" [disabled]="account.isDeleting">
             <span *ngIf="account.isDeleting" class="spinner-border spinner-border-sm"></span>
             <span *ngIf="!account.isDeleting">Delete</span>
