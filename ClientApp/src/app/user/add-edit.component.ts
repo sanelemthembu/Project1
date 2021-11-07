@@ -21,6 +21,7 @@ export class AddEditComponent implements OnInit {
   nxtAccountNumber: number;
   canAddAccount: boolean;
   canDeleteUser: boolean;
+  canClose: boolean;
 
   constructor(
     private modalService: NgbModal,
@@ -196,7 +197,14 @@ export class AddEditComponent implements OnInit {
   }
 
   closeAccount(id: number) {
-    console.log(id)
+
+    const currentAcc = this.accounts.find(x => x.code === id);
+    console.log(currentAcc)
+
+    if (currentAcc.outstandingBalance > 0) {
+      this.alertService.error('Please settle the balance before closing the Account.')
+    }
+
     this.accountService.closeAccount(id, false)
       .subscribe(e => {
       console.log(e)
