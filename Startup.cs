@@ -43,6 +43,7 @@ namespace Project1
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
 
+            services.AddScoped<ITransactionservice, Transactionservice>();
             services.AddScoped<IPersonservice, Personservice>();
             services.AddScoped<IAccountservice, Accountservice>();
             services.AddControllersWithViews()

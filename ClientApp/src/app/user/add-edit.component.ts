@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
-import { AccountService, AlertService } from 'src/app/services';
+import { AccountService, TransactionAccountService, AlertService } from 'src/app/services';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({ templateUrl: 'add-edit.component.html' })
@@ -24,12 +24,12 @@ export class AddEditComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private accountService: AccountService,
+    private tranactionAccount: TransactionAccountService,
     private alertService: AlertService
   ) { }
 
 
   open(content) {
-        
     console.log(this.nxtAccountNumber)
     this.formAccount = this.formBuilder.group({
       code: 0,
@@ -70,7 +70,7 @@ export class AddEditComponent implements OnInit {
     if (this.isAddMode) {
       passwordValidators.push(Validators.required);
     }
-   
+
     this.form = this.formBuilder.group({
       code: [''],
       name: ['', Validators.required],
@@ -82,22 +82,12 @@ export class AddEditComponent implements OnInit {
 
     if (!this.isAddMode) {
 
-      this.accountService.getById(this.id)
-        .pipe(first())
-        .subscribe(x => {
-
-          this.f.code.setValue(x.code);
-          this.f.name.setValue(x.name);
-          this.f.surname.setValue(x.surname);
-          this.f.idnumber.setValue(x.idNumber);
-          this.f.username.setValue(x.username);
-          this.accounts = x.accounts;
-        });
+      this.refreshAccount()
     }
   }
 
   GetNextAccountNumber(): any {
-    this.accountService.GetAccountNumber()      
+    this.accountService.GetAccountNumber()
       .subscribe(x => {
         this.nxtAccountNumber = x
       });
@@ -146,7 +136,6 @@ export class AddEditComponent implements OnInit {
       .subscribe(
         data => {
           this.alertService.success('Account added successfully', { keepAfterRouteChange: true });
-          this.router.navigate(['.', { relativeTo: this.route }]);
         },
         error => {
           this.alertService.error(error);
@@ -155,6 +144,7 @@ export class AddEditComponent implements OnInit {
   }
 
   onSubmitAccount() {
+    this.GetNextAccountNumber()
     this.submitted = true;
 
     if (this.form.invalid) {
@@ -164,8 +154,24 @@ export class AddEditComponent implements OnInit {
     this.loading = true;
     this.addAccount();
     this.modalService.dismissAll();
+    this.refreshAccount()
+    this.router.navigate(['./users/edit/' + this.id]);
+    this.loading = false;
+
   }
 
+  refreshAccount() {
+    this.accountService.getById(this.id)
+      .pipe(first())
+      .subscribe(x => {
+        this.f.code.setValue(x.code);
+        this.f.name.setValue(x.name);
+        this.f.surname.setValue(x.surname);
+        this.f.idnumber.setValue(x.idNumber);
+        this.f.username.setValue(x.username);
+        this.accounts = x.accounts;
+      });
+  }
 
   private updateUser() {
     this.accountService.update(this.id, this.form.value)
@@ -180,4 +186,17 @@ export class AddEditComponent implements OnInit {
           this.loading = false;
         });
   }
+
+  deleteAccount(id: number) {
+    const acc = this.accounts.find(x => x.code === id);
+    console.log(acc)
+    acc.isDeleting = true;
+    console.log('here')
+    this.tranactionAccount.delete(id)
+      .subscribe(e => {
+        console.log(e)
+        this.accounts = this.accounts.filter(x => x.code !== id)
+      });
+  }
+
 }

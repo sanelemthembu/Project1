@@ -4,6 +4,8 @@ using DataAccessLayer.Models;
 using Microsoft.AspNetCore.Authorization;
 using LogicLayer.Models;
 using LogicLayer;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Project1.Controllers
 {
@@ -49,8 +51,6 @@ namespace Project1.Controllers
             }
         }
 
-
-        // GET: api/Persons/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Transaction>> GetTransaction(int id)
         {
@@ -61,5 +61,24 @@ namespace Project1.Controllers
             }
             return trans;
         }
+
+
+        [HttpGet("{pageNo}/{pageSize}")]
+        public async Task<ActionResult<IEnumerable<Transaction>>> GetPagedPersons(int pageNo, int pageSize)
+        {
+            var x = pageNo - 1;
+            var persons = _transactionservice.GetAll()
+                .Skip(x * pageSize)
+                .Take(pageSize)
+                .ToList();
+            return persons;
+        }
+
+        [HttpGet("Count")]
+        public int PersonsCount()
+        {
+            return _transactionservice.Count();
+        }
+
     }
 }

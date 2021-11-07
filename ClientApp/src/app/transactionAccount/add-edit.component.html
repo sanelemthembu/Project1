@@ -16,7 +16,6 @@
   <thead>
     <tr>
       <th>ID</th>
-      <th>Account Number</th>
       <th>Transaction Date</th>
       <th>Capture Date</th>
       <th>Amount</th>
@@ -26,14 +25,13 @@
   <tbody>
     <tr *ngFor="let transaction of transactions">
       <td>{{transaction.code}}</td>
-      <td>{{transaction.accountCode}}</td>
       <td>{{transaction.transactionDate}}</td>
       <td>{{transaction.captureDate}}</td>
       <td>{{transaction.amount}}</td>
       <td>{{transaction.description}}</td>
       <td style="white-space: nowrap">
         <a routerLink="edit/{{transaction.code}}" class="btn btn-sm btn-primary mr-1">Edit</a>
-        <button (click)="deleteTransaction(account.code)" class="btn btn-sm btn-danger btn-delete-user" [disabled]="transaction.isDeleting">
+        <button (click)="deleteTransaction(transaction.code)" class="btn btn-sm btn-danger btn-delete-user" [disabled]="transaction.isDeleting">
           <span *ngIf="transaction.isDeleting" class="spinner-border spinner-border-sm"></span>
           <span *ngIf="!transaction.isDeleting">Delete</span>
         </button>
@@ -58,21 +56,21 @@
       <div class="form-row">
         <div class="form-group col">
           <label for="transactionDate">Transaction Date</label>
-          <div class="input-group">
+          <!--<div class="input-group">
             <input class="form-control" placeholder="yyyy-mm-dd" formControlName="transactionDate"
-                   name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker">
+                   name="dp" [(ngModel)]="transactionDate" ngbDatepicker #d="ngbDatepicker">
             <div class="input-group-append">
               <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"></button>
             </div>
-          </div>
+          </div>-->
         </div>
         <div class="form-group col">
           <label for="captureDate">Capture Date</label>
-          <div class="input-group">
+          <!--<div class="input-group">
             <input class="form-control" placeholder="yyyy-mm-dd" formControlName="captureDate"
-                   name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker">
+                   name="dp" [(ngModel)]="captureDate" ngbDatepicker #d="ngbDatepicker">
             <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"></button>
-          </div>
+          </div>-->
         </div>
         <div class="form-group col">
           <label for="amount">Amount</label>

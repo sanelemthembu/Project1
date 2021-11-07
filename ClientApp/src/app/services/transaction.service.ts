@@ -4,19 +4,19 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { TransactionAccount, User } from 'src/app/models';
+import { Transaction, TransactionAccount, User } from 'src/app/models';
 
 @Injectable({ providedIn: 'root' })
 export class TransactionService {
 
 
-  addTransaction(transaction: any) {
-    return this.http.post(`${this.baseUrl}/Person/account`, transaction);
+  getPagedTransactions(page: number, pageSize: number) {
+    return this.http.get<Transaction[]>(`${this.baseUrl}/Transaction/${page}/${pageSize}`);
+  }
+  getAllTransactionCount() {
+    return this.http.get(`${this.baseUrl}/Transaction/Count`);
   }
 
-  GetAccountNumber() {
-    return this.http.get<number>(`${this.baseUrl}/Person/accountnumber`);
-  }
   private userSubject: BehaviorSubject<User>;
   public user: Observable<User>;
   baseUrl: string;
@@ -35,48 +35,21 @@ export class TransactionService {
     return this.userSubject.value;
   }
 
-  login(username, password) {
-    return this.http.post<User>(`${this.baseUrl}/Person/authenticate`, { username, password })
-      .pipe(map(user => {
-        console.log(user);
-        localStorage.setItem('user', JSON.stringify(user));
-        this.userSubject.next(user);
-        return user;
-      }));
-  }
-
-  logout() {
-    localStorage.removeItem('user');
-    this.userSubject.next(null);
-    this.router.navigate(['/account/login']);
-  }
-
-  register(user: User) {
-    return this.http.post(`${this.baseUrl}/Person`, user);
-  }
-
-  getPagedUsers(pageNo, usersPerPaage) {
-    return this.http.get<User[]>(`${this.baseUrl}/Person/${pageNo}/${usersPerPaage}`);
-  }
-
-  getAllUsersCount() {
-    return this.http.get(`${this.baseUrl}/Person/PersonCount`);
-  }
   getAll() {
-    return this.http.get<User[]>(`${this.baseUrl}/Person`);
+    return this.http.get<Transaction[]>(`${this.baseUrl}/Transaction`);
   }
 
   getById(id: string) {
-    return this.http.get<User>(`${this.baseUrl}/Person/${id}`);
+    return this.http.get<Transaction>(`${this.baseUrl}/Transaction/${id}`);
   }
 
-  addAccount(acc: TransactionAccount) {
-    return this.http.post(`${this.baseUrl}/Person/account`, acc);
-  }
 
+  addTransaction(transaction: any) {
+    return this.http.post(`${this.baseUrl}/Transaction`, transaction);
+  }
 
   update(id, params) {
-    return this.http.put(`${this.baseUrl}/Person/${id}`, params)
+    return this.http.put(`${this.baseUrl}/Transaction/${id}`, params)
       .pipe(map(x => {
         // update stored user if the logged in user updated their own record
         if (id == this.userValue.code) {
@@ -92,11 +65,10 @@ export class TransactionService {
   }
 
   delete(id: number) {
-    return this.http.delete(`${this.baseUrl}/Person/${id}`)
+    return this.http.delete(`${this.baseUrl}/Transaction/${id}`)
       .pipe(map(x => {
         // auto logout if the logged in user deleted their own record
         if (id == this.userValue.code) {
-          this.logout();
         }
         return x;
       }));

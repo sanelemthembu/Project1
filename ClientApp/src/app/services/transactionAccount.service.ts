@@ -9,6 +9,10 @@ import { TransactionAccount, User } from 'src/app/models';
 @Injectable({ providedIn: 'root' })
 export class TransactionAccountService {
 
+  delete(id: number) {
+    return this.http.delete(`${this.baseUrl}/Account/${id}`)
+  }
+  
   private userSubject: BehaviorSubject<User>;
   public user: Observable<User>;
   baseUrl: string;

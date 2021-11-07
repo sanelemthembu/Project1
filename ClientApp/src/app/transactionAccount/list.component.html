@@ -1,0 +1,35 @@
+<!--<h1>Transactions</h1>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th style="width: 10%">Amount</th>
+      <th style="width: 15%">Transaction Date</th>
+      <th style="width: 15%">Capture Date</th>
+      <th style="width: 60%">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let trans of transactions">
+      <td>{{trans.amount}}</td>
+      <td>{{trans.transactionDate}}</td>
+      <td>{{trans.captureDate}}</td>
+      <td>{{trans.description}}</td>
+      <td style="white-space: nowrap">
+        <a routerLink="edit/{{trans.code}}" class="btn btn-sm btn-primary mr-1">Edit</a>
+        <button (click)="deleteTrans(trans.code)" class="btn btn-sm btn-danger btn-delete-user" [disabled]="trans.isDeleting">
+          <span *ngIf="trans.isDeleting" class="spinner-border spinner-border-sm"></span>
+          <span *ngIf="!trans.isDeleting">Delete</span>
+        </button>
+      </td>
+    </tr>
+    <tr *ngIf="!transactions">
+      <td colspan="4" class="text-center">
+        <span class="spinner-border spinner-border-lg align-center"></span>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<div class="d-flex justify-content-between p-2">
+  <ngb-pagination [collectionSize]="collectionSize" [(page)]="page" [pageSize]="pageSize" (pageChange)="refresh()">        </ngb-pagination>
+</div>-->

@@ -31,5 +31,12 @@ namespace Project1.Controllers
             }
             return account;
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletePerson(int id)
+        {
+            _accountservice.Delete(id);
+            return Accepted();
+        }
     }
 }
