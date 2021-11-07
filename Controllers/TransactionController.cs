@@ -32,6 +32,7 @@ namespace Project1.Controllers
             }
             return BadRequest();
         }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTransaction(int id, Transaction trans)
         {

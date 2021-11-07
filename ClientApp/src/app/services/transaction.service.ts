@@ -45,6 +45,7 @@ export class TransactionService {
 
 
   addTransaction(transaction: any) {
+    console.log(transaction)
     return this.http.post(`${this.baseUrl}/Transaction`, transaction);
   }
 

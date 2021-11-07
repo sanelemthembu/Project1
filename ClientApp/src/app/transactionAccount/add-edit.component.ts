@@ -25,16 +25,18 @@ export class AddEditComponent implements OnInit {
   formTransaction: FormGroup;
   transactions: Transaction[];
   account: TransactionAccount;
-  transactionDate: NgbDateStruct;
+  transactionDate: string;
   today: any;
+
+  model: NgbDateStruct;
 
   page = 1;
   pageSize = 10;
   collectionSize: number;
 
   constructor(
+    private dp: DatePipe,
     private cal: NgbCalendar,
-    private dateTimePipe: DatePipe,
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -47,6 +49,8 @@ export class AddEditComponent implements OnInit {
     this.today = cal.getToday()
 
     console.log(this.today)
+    console.log(this.dateToString(this.today))
+
   }
 
 
@@ -111,10 +115,10 @@ export class AddEditComponent implements OnInit {
       code: 0,
       accountCode: this.id,
       transactionDate: [''],
-      captureDate: [{ value: new Date().toISOString(), disabled: true }],
+      captureDate: [this.dateToString(this.today)],
       amount: [0, Validators.min(1)],
       description: [''],
-      type: ['']
+      transactionType: ['']
     });
 
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
@@ -149,7 +153,11 @@ export class AddEditComponent implements OnInit {
     this.loading = false;
   }
 
+  private dateToString = (date) => `${date.year}-${date.month}-${date.day}`;
+
   private addTransaction() {
+    let stringDate = this.dateToString(this.formTransaction.get('transactionDate').value);
+    this.formTransaction.get('transactionDate').setValue(stringDate)
     this.transactionService.addTransaction(this.formTransaction.value)
       .pipe(first())
       .subscribe(
