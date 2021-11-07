@@ -38,5 +38,12 @@ namespace Project1.Controllers
             _accountservice.Delete(id);
             return Accepted();
         }
+
+        [HttpPut("{id}")]
+        public async Task<bool> CloseAccount(int id, bool state)
+        {
+            var closed = _accountservice.UpdateForClose(id, state) == 1;
+            return closed;
+        }
     }
 }

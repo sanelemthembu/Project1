@@ -195,6 +195,14 @@ export class AddEditComponent implements OnInit {
       });
   }
 
+  closeAccount(id: number) {
+    console.log(id)
+    this.accountService.closeAccount(id, false)
+      .subscribe(e => {
+      console.log(e)
+    })
+  }
+
   private updateUser() {
     this.accountService.update(this.id, this.form.value)
       .pipe(first())

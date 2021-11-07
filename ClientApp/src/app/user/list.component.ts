@@ -60,8 +60,9 @@ export class ListComponent implements OnInit {
   deleteUser(id: number) {
 
     const user = this.users.find(x => x.code === id);
-    if (user.accounts.length > 0)
-    //&& user.accounts.filter(p => p.state !== 'Closed'))
+
+    if (user.accounts.length > 0
+      && user.accounts.filter(p => p.isActive === true).length > 0)
     {
       this.alertService.error('This user can not be deleted, until all accounts are closed.');
       user.isDeleting = false;

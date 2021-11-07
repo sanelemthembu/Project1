@@ -8,6 +8,11 @@ import { TransactionAccount, User } from 'src/app/models';
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
+
+  closeAccount(id: number, params: any) {
+    return this.http.put(`${this.baseUrl}/Account/${id}`, params);
+  }
+
   GetAccountNumber() {
     return this.http.get<number>(`${this.baseUrl}/Person/accountnumber`);
   }
