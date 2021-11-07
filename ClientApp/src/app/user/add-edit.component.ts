@@ -5,6 +5,7 @@ import { first } from 'rxjs/operators';
 
 import { AccountService, TransactionAccountService, AlertService } from 'src/app/services';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { User } from '../models';
 
 @Component({ templateUrl: 'add-edit.component.html' })
 export class AddEditComponent implements OnInit {
@@ -15,8 +16,11 @@ export class AddEditComponent implements OnInit {
   submitted = false;
   formAccount: FormGroup;
   accounts: any[];
+  persons: User[];
   closeResult = '';
   nxtAccountNumber: number;
+  canAddAccount: boolean;
+  canDeleteUser: boolean;
 
   constructor(
     private modalService: NgbModal,
@@ -26,7 +30,9 @@ export class AddEditComponent implements OnInit {
     private accountService: AccountService,
     private tranactionAccount: TransactionAccountService,
     private alertService: AlertService
-  ) { }
+  ) {
+
+  }
 
 
   open(content) {
@@ -60,7 +66,10 @@ export class AddEditComponent implements OnInit {
 
   ngOnInit() {
 
-    
+
+    this.accountService.getAll().subscribe(all => {
+      this.persons = all
+    })
     this.GetNextAccountNumber()
 
     this.id = this.route.snapshot.params['id'];
@@ -69,11 +78,12 @@ export class AddEditComponent implements OnInit {
     // password not required in edit mode
     const passwordValidators = [Validators.minLength(6)];
     if (this.isAddMode) {
+      this.canAddAccount = false;
       passwordValidators.push(Validators.required);
     }
 
     this.form = this.formBuilder.group({
-      code: [''],
+      code: 0,
       name: ['', Validators.required],
       surname: ['', Validators.required],
       username: ['', Validators.required],
@@ -82,7 +92,7 @@ export class AddEditComponent implements OnInit {
     });
 
     if (!this.isAddMode) {
-
+      this.canAddAccount = true;
       this.refreshAccount()
     }
 
@@ -118,6 +128,15 @@ export class AddEditComponent implements OnInit {
   }
 
   private createUser() {
+
+    let incomingIdNumber = this.form.get('idnumber').value;
+    let validUser = this.persons.filter(f => f.idNumber === incomingIdNumber);
+    if (validUser.length > 0) {
+      this.alertService.error('User with same Id Number already Exists.');
+      this.loading = false;
+      return;
+    }
+
     this.accountService.register(this.form.value)
       .pipe(first())
       .subscribe(
@@ -163,12 +182,10 @@ export class AddEditComponent implements OnInit {
   }
 
   refreshAccount() {
-    
+
     this.accountService.getById(this.id)
       .pipe(first())
       .subscribe(x => {
-        console.log(x)
-
         this.f.code.setValue(x.code);
         this.f.name.setValue(x.name);
         this.f.surname.setValue(x.surname);
@@ -194,9 +211,7 @@ export class AddEditComponent implements OnInit {
 
   deleteAccount(id: number) {
     const acc = this.accounts.find(x => x.code === id);
-    console.log(acc)
     acc.isDeleting = true;
-    console.log('here')
     this.tranactionAccount.delete(id)
       .subscribe(e => {
         console.log(e)

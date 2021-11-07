@@ -23,9 +23,9 @@
             <td>{{user.idNumber}}</td>
             <td style="white-space: nowrap">
                 <a routerLink="edit/{{user.code}}" class="btn btn-sm btn-primary mr-1">Edit</a>
-                <button (click)="deleteUser(user.code)" class="btn btn-sm btn-danger btn-delete-user" [disabled]="user.isDeleting">
-                    <span *ngIf="user.isDeleting" class="spinner-border spinner-border-sm"></span>
-                    <span *ngIf="!user.isDeleting">Delete</span>
+                <button (click)="deleteUser(user.code)" class="btn btn-sm btn-danger btn-delete-user" [disabled]="isDeleting">
+                    <span *ngIf="isDeleting" class="spinner-border spinner-border-sm"></span>
+                    <span *ngIf="!isDeleting">Delete</span>
                 </button>
             </td>
         </tr>

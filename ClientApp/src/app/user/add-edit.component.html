@@ -52,34 +52,35 @@
   </div>
 </form>
 
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Account Number</th>
-      <th>Outstanding Balance</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let account of accounts">
-      <td>{{account.code}}</td>
-      <td>{{account.accountNumber}}</td>
-      <td>{{account.outstandingBalance}}</td>
-      <td style="white-space: nowrap">
-        <a routerLink="/transactionAccount/edit/{{account.code}}" class="btn btn-sm btn-primary mr-1">Edit</a>
-        <button (click)="deleteAccount(account.code)" class="btn btn-sm btn-danger btn-delete-user" [disabled]="account.isDeleting">
-          <span *ngIf="account.isDeleting" class="spinner-border spinner-border-sm"></span>
-          <span *ngIf="!account.isDeleting">Delete</span>
-        </button>
-      </td>
-    </tr>
-  </tbody>
-</table>
-<button [disabled]="loading" class="btn btn-success" (click)="open(content)">
-  <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-  Add Account
-</button>
-
+<div *ngIf="canAddAccount">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Account Number</th>
+        <th>Outstanding Balance</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let account of accounts">
+        <td>{{account.code}}</td>
+        <td>{{account.accountNumber}}</td>
+        <td>{{account.outstandingBalance}}</td>
+        <td style="white-space: nowrap">
+          <a routerLink="/transactionAccount/edit/{{account.code}}" class="btn btn-sm btn-primary mr-1">Edit</a>
+          <button (click)="deleteAccount(account.code)" class="btn btn-sm btn-danger btn-delete-user" [disabled]="account.isDeleting">
+            <span *ngIf="account.isDeleting" class="spinner-border spinner-border-sm"></span>
+            <span *ngIf="!account.isDeleting">Delete</span>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <button [disabled]="loading" class="btn btn-success" (click)="open(content)">
+    <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+    Add Account
+  </button>
+</div>
 <ng-template #content let-modal>
   <div class="modal-header">
     <h4 class="modal-title" id="modal-basic-title">Account Details</h4>
@@ -96,12 +97,12 @@
         </div>-->
         <div class="form-group col">
           <label for="accountNumber">Account Number</label>
-          <input type="text" disabled="disabled" formControlName="accountNumber" class="form-control"/>          
+          <input type="text" disabled="disabled" formControlName="accountNumber" class="form-control" />
         </div>
         <div class="form-group col">
           <label for="outstandingBalance">Outstanding Balance</label>
           <input type="text" disabled="disabled" formControlName="outstandingBalance" class="form-control" />
-          
+
         </div>
       </div>
       <div class="form-group">

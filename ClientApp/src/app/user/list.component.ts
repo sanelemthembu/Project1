@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { User } from '../models';
 import { first } from 'rxjs/operators';
 
-import { AccountService } from 'src/app/services';
+import { AccountService, AlertService } from 'src/app/services';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({ templateUrl: 'list.component.html' })
@@ -14,10 +14,13 @@ export class ListComponent implements OnInit {
   pageSize = 10;
   collectionSize: number;
   form: FormGroup;
+  isDeleting: boolean;
 
 
 
-  constructor(private accountService: AccountService, private formBuilder: FormBuilder) {
+  constructor(private accountService: AccountService,
+    private alertService: AlertService,
+    private formBuilder: FormBuilder) {
     this.accountService.getAll().subscribe(all => {
       this.mainUsersSource = all
     })
@@ -55,9 +58,17 @@ export class ListComponent implements OnInit {
   }
 
   deleteUser(id: number) {
+
     const user = this.users.find(x => x.code === id);
-    console.log(user)
-    user.isDeleting = true;
+    if (user.accounts.length > 0)
+    //&& user.accounts.filter(p => p.state !== 'Closed'))
+    {
+      this.alertService.error('This user can not be deleted, until all accounts are closed.');
+      user.isDeleting = false;
+      return;
+    }
+
+
     this.accountService.delete(id)
       .pipe(first())
       .subscribe(() => {
