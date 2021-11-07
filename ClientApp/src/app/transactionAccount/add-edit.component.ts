@@ -122,7 +122,8 @@ export class AddEditComponent implements OnInit {
     this.loading = true;
     this.addTransaction();
     this.modalService.dismissAll();
-    this.router.navigate(['./transactionAccount/edit/' + this.id, { relativeTo: this.route }]);
+    console.log(this.id)
+    this.router.navigate(['./transactionAccount/edit/' + this.id]);
     this.loading = false;
   }
 
@@ -132,7 +133,6 @@ export class AddEditComponent implements OnInit {
       .subscribe(
         data => {
           this.alertService.success('Account added successfully', { keepAfterRouteChange: true });
-          this.router.navigate(['.', { relativeTo: this.route }]);
         },
         error => {
           this.alertService.error(error);

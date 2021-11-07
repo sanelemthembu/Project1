@@ -60,6 +60,7 @@ export class AddEditComponent implements OnInit {
 
   ngOnInit() {
 
+    
     this.GetNextAccountNumber()
 
     this.id = this.route.snapshot.params['id'];
@@ -84,6 +85,7 @@ export class AddEditComponent implements OnInit {
 
       this.refreshAccount()
     }
+
   }
 
   GetNextAccountNumber(): any {
@@ -161,9 +163,12 @@ export class AddEditComponent implements OnInit {
   }
 
   refreshAccount() {
+    
     this.accountService.getById(this.id)
       .pipe(first())
       .subscribe(x => {
+        console.log(x)
+
         this.f.code.setValue(x.code);
         this.f.name.setValue(x.name);
         this.f.surname.setValue(x.surname);
