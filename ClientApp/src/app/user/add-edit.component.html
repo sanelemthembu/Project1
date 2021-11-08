@@ -19,7 +19,7 @@
       <label for="idnumber">ID Number</label>
       <input type="text" formControlName="idnumber" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.idnumber.errors }" />
       <div *ngIf="submitted && f.idnumber.errors" class="invalid-feedback">
-        <div *ngIf="f.idnumber.errors.required">Last Name is required</div>
+        <div *ngIf="f.idnumber.errors.required">ID Number is required</div>
       </div>
     </div>
   </div>
@@ -75,7 +75,7 @@
             <span *ngIf="account.isDeleting" class="spinner-border spinner-border-sm"></span>
             <span *ngIf="!account.isDeleting">Delete</span>
           </button>
-          <button (click)="closeAccount(account.code)" class="btn btn-sm btn-warning" [disabled]="account.isClosing">
+          <button *ngIf="account.isActive" (click)="closeAccount(account.code)" class="btn btn-sm btn-warning" [disabled]="account.isClosing">
             <span *ngIf="account.isClosing" class="spinner-border spinner-border-sm"></span>
             <span *ngIf="!account.isClosing">Close Account</span>
           </button>

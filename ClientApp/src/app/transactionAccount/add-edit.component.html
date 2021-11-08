@@ -35,9 +35,6 @@
       <td>{{transaction.transactionType}}</td>
       <td>{{transaction.amount}}</td>
       <td>{{transaction.description}}</td>
-      <td style="white-space: nowrap">
-        <a routerLink="edit/{{transaction.code}}" class="btn btn-sm btn-primary mr-1">Edit</a>
-      </td>
     </tr>
   </tbody>
 </table>
@@ -45,6 +42,7 @@
   <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
   Add Transaction
 </button>
+<p style="font-size:x-small" *ngIf="!accountClosed"> This account is closed, no more transactions can be done.</p>
 
 <ng-template #content let-modal>
   <div class="modal-header">
@@ -59,10 +57,13 @@
         <div class="form-group col">
           <label for="transactionDate">Transaction Date</label>
           <div class="input-group">
-            <input class="form-control" placeholder="yyyy-mm-dd" formControlName="transactionDate"
+            <input class="form-control" placeholder="yyyy-mm-dd" formControlName="transactionDate" [ngClass]="{ 'is-invalid': submitted && t.transactionDate.errors }"
                    name="dp" ngbDatepicker #d="ngbDatepicker" [maxDate]="today">
             <div class="input-group-append">
               <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"></button>
+            </div>
+            <div *ngIf="submitted && t.transactionDate.errors" class="invalid-feedback">
+              <div *ngIf="t.transactionDate.errors.required">Transaction date is required.</div>
             </div>
           </div>
         </div>
@@ -74,7 +75,7 @@
         </div>
         <div class="form-group col">
           <label for="amount">Amount</label>
-          <input type="text" formControlName="amount" class="form-control" />
+          <input type="text" formControlName="amount" class="form-control" [ngClass]="{ 'is-invalid': submitted && t.amount.errors }" />
           <div *ngIf="submitted && t.amount.errors" class="invalid-feedback">
             <div *ngIf="t.amount.errors.min">Amount must be at least R1.</div>
           </div>
@@ -86,6 +87,9 @@
           <select (change)="onTypeChanged($event)" class="browser-default custom-select" formControlName="transactionType" id="transactionType" [ngClass]="{ 'is-invalid': submitted && t.transactionType.errors }">
             <option *ngFor="let option of types" [value]="option">{{option}}</option>
           </select>
+          <div *ngIf="submitted && t.transactionType.errors" class="invalid-feedback">
+            <div *ngIf="t.transactionType.errors.required">Transaction type is required.</div>
+          </div>
         </div>
       </div>
       <div class="form-row">

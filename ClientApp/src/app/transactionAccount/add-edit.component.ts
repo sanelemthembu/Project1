@@ -59,7 +59,7 @@ export class AddEditComponent implements OnInit {
       code: 0,
       accountNumber: [{ value: '', disabled: true }],
       outstandingBalance: [{ value: '', disabled: true }],
-      isActive: true,
+      isActive: [{ value: true, disabled: true }]
     });
 
     if (!this.isAddMode) {
@@ -102,11 +102,11 @@ export class AddEditComponent implements OnInit {
     this.formTransaction = this.formBuilder.group({
       code: 0,
       accountCode: this.id,
-      transactionDate: [''],
+      transactionDate: ['', Validators.required],
       captureDate: [this.dateToString(this.today)],
       amount: [0, Validators.min(1)],
       description: [''],
-      transactionType: ['']
+      transactionType: ['', Validators.required]
     });
 
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
