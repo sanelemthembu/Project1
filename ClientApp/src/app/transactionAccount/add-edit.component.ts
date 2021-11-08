@@ -68,7 +68,7 @@ export class AddEditComponent implements OnInit {
         .pipe(first())
         .subscribe(x => {
           this.f.accountNumber.setValue(x.accountNumber);
-          this.f.outstandingBalance.setValue(x.outstandingBalance);
+          this.f.outstandingBalance.setValue('R ' + x.outstandingBalance);
           this.f.isActive.setValue(x.isActive);
           this.transactions = x.transactions
 
