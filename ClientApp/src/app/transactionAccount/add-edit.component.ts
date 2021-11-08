@@ -15,6 +15,7 @@ export class AddEditComponent implements OnInit {
   types: any[];
   selectedType: string;
   id: string;
+  accountId: number;
   isAddMode: boolean;
   loading: boolean;
   accountClosed: boolean;
@@ -27,7 +28,7 @@ export class AddEditComponent implements OnInit {
   account: TransactionAccount;
   transactionDate: string;
   today: any;
-
+  debitCredit: any;
   model: NgbDateStruct;
 
   constructor(
@@ -44,18 +45,15 @@ export class AddEditComponent implements OnInit {
 
     this.today = cal.getToday()
     console.log(this.dateToString(this.today))
+    this.types = ['Credit', 'Debit']
 
   }
 
 
   ngOnInit() {
 
-    this.types = ['Credit', 'Debit']
-
     this.id = this.route.snapshot.params['id'];
     this.isAddMode = !this.id;
-
-    this.refresh()
 
     this.form = this.formBuilder.group({
       code: 0,
@@ -72,7 +70,12 @@ export class AddEditComponent implements OnInit {
           this.f.accountNumber.setValue(x.accountNumber);
           this.f.outstandingBalance.setValue(x.outstandingBalance);
           this.f.isActive.setValue(x.isActive);
+          this.transactions = x.transactions
+
+          this.accountClosed = x.isActive
         });
+
+
     }
   }
   onTypeChanged(event: any) {
@@ -82,28 +85,16 @@ export class AddEditComponent implements OnInit {
 
   refresh() {
 
-    console.log('id - ' + this.id)
-
     this.transactionAccountService.getById(this.id)
       .pipe(first())
-      .subscribe(a => {
-        console.log('a - ' + a)
+      .subscribe(x => {
+        this.f.accountNumber.setValue(x.accountNumber);
+        this.f.outstandingBalance.setValue(x.outstandingBalance);
+        this.f.isActive.setValue(x.isActive);
+        this.transactions = x.transactions
 
-        this.account = a
-        this.accountClosed = a.isActive
-
-        this.stateDescription = this.accountClosed ? 'Active' : 'Closed';
-        this.form.get('state').setValue(this.stateDescription);
-      })
-
-    this.transactionService.getPagedTransactions(this.account.code)
-      .pipe(first())
-      .subscribe(u => {
-        console.log(u)
-        this.transactions = u.filter(f => f.accountCode === this.account.code)
-        console.log(this.transactions)
-
-      })
+        this.accountClosed = x.isActive
+      });
   }
 
   open(content) {
@@ -160,6 +151,7 @@ export class AddEditComponent implements OnInit {
       .subscribe(
         data => {
           this.alertService.success('Account added successfully', { keepAfterRouteChange: true });
+          this.refresh()
         },
         error => {
           this.alertService.error(error);
