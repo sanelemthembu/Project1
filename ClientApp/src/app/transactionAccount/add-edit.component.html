@@ -35,12 +35,6 @@
       <td>{{transaction.transactionType}}</td>
       <td>R {{transaction.amount}}</td>
       <td>{{transaction.description}}</td>
-      <td style="white-space: nowrap">
-        <button [disabled]="loading" class="btn btn-warning" (click)="open(content, transaction.code)">
-          <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-          Modify Transaction
-        </button>
-      </td>
     </tr>
   </tbody>
 </table>
