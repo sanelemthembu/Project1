@@ -26,6 +26,7 @@ namespace Project1.Controllers
         public async Task<ActionResult<Transaction>> PostTransaction(Transaction trans)
         {
             var result = await _transactionservice.Add(trans);
+            var updatedBalance = _transactionservice.UpdateBalance(trans.AccountCode);
             if (result != null)
             {
                 return CreatedAtAction("GetTransaction", trans);
@@ -44,6 +45,7 @@ namespace Project1.Controllers
             try
             {
                 _transactionservice.Update(trans);
+                var updatedBalance = _transactionservice.UpdateBalance(trans.AccountCode);
                 return Ok();
             }
             catch (AppException ex)
