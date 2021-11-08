@@ -97,7 +97,21 @@ export class AddEditComponent implements OnInit {
       });
   }
 
-  open(content) {
+  open(content, code) {
+
+    if (code != null) {
+
+      this.transactionService.getById(code)
+        .pipe(first())
+        .subscribe(x => {
+          console.log(x)
+          this.t.transactionDate.setValue(x.transactionDate);
+          this.t.captureDate.setValue(this.dateToString(this.today));
+          this.t.amount.setValue(x.amount);
+          this.t.transactionType.setValue(x.transactionType);
+          this.t.code.setValue(x.code);
+        });
+    }
 
     this.formTransaction = this.formBuilder.group({
       code: 0,
@@ -127,6 +141,8 @@ export class AddEditComponent implements OnInit {
   }
 
   onSubmitTransaction() {
+
+    console.log(this.formTransaction)
     this.submitted = true;
 
     if (this.formTransaction.invalid) {
@@ -144,6 +160,22 @@ export class AddEditComponent implements OnInit {
   private dateToString = (date) => `${date.year}-${date.month}-${date.day}`;
 
   private addTransaction() {
+
+    if (this.formTransaction.get('transcactionCode').value > 0) {
+      this.transactionService.update(this.formTransaction.get('transcactionCode').value, this.formTransaction.value)
+        .pipe(first())
+        .subscribe(
+          data => {
+            this.alertService.success('Account Updated successfully', { keepAfterRouteChange: true });
+            this.refresh()
+          },
+          error => {
+            this.alertService.error(error);
+          });
+    }
+
+
+
     let stringDate = this.dateToString(this.formTransaction.get('transactionDate').value);
     this.formTransaction.get('transactionDate').setValue(stringDate)
     this.transactionService.addTransaction(this.formTransaction.value)
