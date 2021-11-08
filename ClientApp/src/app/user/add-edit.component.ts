@@ -22,6 +22,7 @@ export class AddEditComponent implements OnInit {
   canAddAccount: boolean;
   canDeleteUser: boolean;
   canClose: boolean;
+  canDeleteAccount: boolean;
 
   constructor(
     private modalService: NgbModal,
@@ -43,6 +44,7 @@ export class AddEditComponent implements OnInit {
       personCode: this.id,
       accountNumber: this.nxtAccountNumber,
       outstandingBalance: 0,
+      isActive: true,
       transactions: []
 
     });
@@ -158,6 +160,7 @@ export class AddEditComponent implements OnInit {
       .subscribe(
         data => {
           this.alertService.success('Account added successfully', { keepAfterRouteChange: true });
+          this.refreshAccount()
         },
         error => {
           this.alertService.error(error);
@@ -199,7 +202,6 @@ export class AddEditComponent implements OnInit {
   closeAccount(id: number) {
 
     const currentAcc = this.accounts.find(x => x.code === id);
-    console.log(currentAcc)
 
     if (currentAcc.outstandingBalance > 0) {
       this.alertService.error('Please settle the balance before closing the Account.')
@@ -207,8 +209,8 @@ export class AddEditComponent implements OnInit {
 
     this.accountService.closeAccount(id, false)
       .subscribe(e => {
-      console.log(e)
-    })
+        this.refreshAccount()
+      })
   }
 
   private updateUser() {
@@ -227,6 +229,10 @@ export class AddEditComponent implements OnInit {
 
   deleteAccount(id: number) {
     const acc = this.accounts.find(x => x.code === id);
+    if (acc.isActive) {
+      this.alertService.error('You can not delete an Open Account.')
+      return;
+    }
     acc.isDeleting = true;
     this.tranactionAccount.delete(id)
       .subscribe(e => {

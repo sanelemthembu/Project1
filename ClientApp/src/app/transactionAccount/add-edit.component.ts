@@ -30,10 +30,6 @@ export class AddEditComponent implements OnInit {
 
   model: NgbDateStruct;
 
-  page = 1;
-  pageSize = 10;
-  collectionSize: number;
-
   constructor(
     private dp: DatePipe,
     private cal: NgbCalendar,
@@ -47,8 +43,6 @@ export class AddEditComponent implements OnInit {
   ) {
 
     this.today = cal.getToday()
-
-    console.log(this.today)
     console.log(this.dateToString(this.today))
 
   }
@@ -61,18 +55,13 @@ export class AddEditComponent implements OnInit {
     this.id = this.route.snapshot.params['id'];
     this.isAddMode = !this.id;
 
-    this.transactionService.getAllTransactionCount()
-      .subscribe((res: any) => {
-        this.collectionSize = res
-      })
-
     this.refresh()
 
     this.form = this.formBuilder.group({
       code: 0,
       accountNumber: [{ value: '', disabled: true }],
       outstandingBalance: [{ value: '', disabled: true }],
-      state: [{ value: this.stateDescription, disabled: true }],
+      isActive: true,
     });
 
     if (!this.isAddMode) {
@@ -82,6 +71,7 @@ export class AddEditComponent implements OnInit {
         .subscribe(x => {
           this.f.accountNumber.setValue(x.accountNumber);
           this.f.outstandingBalance.setValue(x.outstandingBalance);
+          this.f.isActive.setValue(x.isActive);
         });
     }
   }
@@ -91,21 +81,28 @@ export class AddEditComponent implements OnInit {
 
 
   refresh() {
+
+    console.log('id - ' + this.id)
+
     this.transactionAccountService.getById(this.id)
+      .pipe(first())
       .subscribe(a => {
+        console.log('a - ' + a)
+
         this.account = a
         this.accountClosed = a.isActive
 
         this.stateDescription = this.accountClosed ? 'Active' : 'Closed';
-
         this.form.get('state').setValue(this.stateDescription);
       })
 
-
-    this.transactionService.getPagedTransactions(this.page, this.pageSize)
+    this.transactionService.getPagedTransactions(this.account.code)
       .pipe(first())
       .subscribe(u => {
+        console.log(u)
         this.transactions = u.filter(f => f.accountCode === this.account.code)
+        console.log(this.transactions)
+
       })
   }
 

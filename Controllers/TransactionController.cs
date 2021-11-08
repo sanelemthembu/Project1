@@ -64,15 +64,13 @@ namespace Project1.Controllers
         }
 
 
-        [HttpGet("{pageNo}/{pageSize}")]
-        public async Task<ActionResult<IEnumerable<Transaction>>> GetPagedPersons(int pageNo, int pageSize)
+        [HttpGet("/byAccount/{id}")]
+        public async Task<ActionResult<IEnumerable<Transaction>>> GetTrans(int accountId)
         {
-            var x = pageNo - 1;
-            var persons = _transactionservice.GetAll()
-                .Skip(x * pageSize)
-                .Take(pageSize)
+            var trans = _transactionservice.GetAll()
+                .Where(p => p.AccountCode == accountId)
                 .ToList();
-            return persons;
+            return trans;
         }
 
         [HttpGet("Count")]

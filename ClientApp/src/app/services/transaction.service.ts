@@ -10,8 +10,8 @@ import { Transaction, TransactionAccount, User } from 'src/app/models';
 export class TransactionService {
 
 
-  getPagedTransactions(page: number, pageSize: number) {
-    return this.http.get<Transaction[]>(`${this.baseUrl}/Transaction/${page}/${pageSize}`);
+  getPagedTransactions(account: number) {
+    return this.http.get<Transaction[]>(`${this.baseUrl}/Transaction/byAccount/${account}`);
   }
   getAllTransactionCount() {
     return this.http.get(`${this.baseUrl}/Transaction/Count`);

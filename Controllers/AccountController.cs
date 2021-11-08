@@ -20,11 +20,10 @@ namespace Project1.Controllers
             _accountservice = accountservice;
         }
 
-        // GET: api/Persons/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Account>> GetAccount(int id)
         {
-            var account = _accountservice.GetById(id);
+            var account = await _accountservice.GetById(id);
             if (account == null)
             {
                 return NotFound();
